@@ -3,7 +3,7 @@ public abstract class Product implements Item {
   private int id;
   private String name;
   private String manufacturer;
-  private String type;
+  private ItemType type;
 
   /**
    * Products
@@ -22,13 +22,13 @@ public abstract class Product implements Item {
    *
    */
 
-  public Product(String name, String manufacturer, String type) {
+  public Product(String name, String manufacturer, ItemType type) {
     this.name = name;
     this.manufacturer = manufacturer;
     this.type = type;
   }
 
-  public String toString(String name, String manufacturer, String type) {
+  public String toString() {
 
     return ("Name: " + name + "\nManufacturer: " + manufacturer + "\nType: " + type);
   }
@@ -45,42 +45,31 @@ public abstract class Product implements Item {
   }
 
   @Override
-  public String getType() {
+  public ItemType getType() {
     return type;
   }
 
-  @Override
-  public void setType(String type) {
-    this.type = type;
-  }
 
   @Override
   public String getManufacturer() {
     return manufacturer;
   }
 
-  @Override
-  public void setManufacturer(String manufacturer) {
-    this.manufacturer = manufacturer;
-  }
 
   @Override
   public String getName() {
     return name;
   }
 
-  @Override
-  public void setName(String name) {
-    this.name = name;
-  }
 }
 
 // We use this class so that we can create products in other parts of our code
 class Widget extends Product {
 
-  public Widget(String name, String manufacturer, String type) {
+  public Widget(String name, String manufacturer, ItemType type) {
     super(name, manufacturer, type);
   }
+
 
 }
 

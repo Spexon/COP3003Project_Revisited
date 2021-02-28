@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="HR">
-  <database-model serializer="dbm" dbms="H2" family-id="H2" format-version="4.19">
+  <database-model serializer="dbm" dbms="H2" family-id="H2" format-version="4.20">
     <root id="1">
       <ServerVersion>1.4.200</ServerVersion>
     </root>
@@ -175,13 +175,11 @@
     <sequence id="163" parent="4" name="SYSTEM_SEQUENCE_46B060F6_FAEA_4C82_A922_AB861CE6F6CC">
       <ObjectId>9</ObjectId>
       <NameSurrogate>1</NameSurrogate>
-      <CacheSize>32</CacheSize>
       <AutoCreated>1</AutoCreated>
     </sequence>
-    <sequence id="164" parent="4" name="SYSTEM_SEQUENCE_77799E0F_86BE_42A4_BE0D_97A519B71E75">
+    <sequence id="164" parent="4" name="SYSTEM_SEQUENCE_B8F61BE2_19D6_4F49_8B0E_985CC8A204AA">
       <ObjectId>4</ObjectId>
       <NameSurrogate>1</NameSurrogate>
-      <CacheSize>32</CacheSize>
       <AutoCreated>1</AutoCreated>
     </sequence>
     <table id="165" parent="4" name="PRODUCT">
@@ -208,39 +206,21 @@
       <Position>4</Position>
       <DataType>VARCHAR|0s</DataType>
     </column>
-    <index id="171" parent="165" name="PRIMARY_KEY_1">
-      <ObjectId>6</ObjectId>
-      <NameSurrogate>1</NameSurrogate>
-      <SourceTextLength>71</SourceTextLength>
-      <ColNames>ID</ColNames>
-      <Unique>1</Unique>
-      <AutoCreated>1</AutoCreated>
-    </index>
-    <index id="172" parent="165" name="PRODUCT_ID_UINDEX">
-      <ObjectId>5</ObjectId>
-      <SourceTextLength>76</SourceTextLength>
-      <ColNames>ID</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <key id="173" parent="165" name="PRODUCT_PK">
-      <ColNames>ID</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="174" parent="166" name="PRODUCTION_NUM">
+    <column id="171" parent="166" name="PRODUCTION_NUM">
       <Position>1</Position>
       <DataType>INT|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="175" parent="166" name="PRODUCT_ID">
+    <column id="172" parent="166" name="PRODUCT_ID">
       <Position>2</Position>
       <DataType>INT|0s</DataType>
     </column>
-    <column id="176" parent="166" name="SERIAL_NUM">
+    <column id="173" parent="166" name="SERIAL_NUM">
       <Position>3</Position>
       <DataType>VARCHAR|0s</DataType>
     </column>
-    <column id="177" parent="166" name="DATE_PRODUCED">
+    <column id="174" parent="166" name="DATE_PRODUCED">
       <Position>4</Position>
       <DataType>DATETIME|0s</DataType>
     </column>

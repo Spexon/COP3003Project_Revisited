@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,11 +27,12 @@ public class Controller {
   @FXML private TableColumn<Product, String> manuCol;
   @FXML private TableColumn<Product, String> typeCol;
   @FXML private ComboBox<Integer> produceComboBox;
-  @FXML private ChoiceBox<ItemType> typeChoiceBox;
+  //@FXML private ChoiceBox<ItemType> typeChoiceBox; // make sure to change FXML id if switching back to this (causes NPE)
+  @FXML private ChoiceBox<String> typeChoiceBoxStr;
   @FXML private TextField manufactField;
   @FXML private TextField prodNameField;
-  ObservableList<Product> data = FXCollections.observableArrayList();
-  ObservableList<ItemType> items = FXCollections.observableArrayList();
+  final ObservableList<Product> data = FXCollections.observableArrayList();
+  ObservableList<String> items = FXCollections.observableArrayList();
   ObservableList<Integer> nums = FXCollections.observableArrayList();
 
   public void addProduct() {
@@ -47,7 +49,7 @@ public class Controller {
           + prodListView.getSelectionModel().getSelectedItem().getName());
       ProductionRecord prod = new ProductionRecord(prodListView.getSelectionModel().getSelectedItem(),
           produceComboBox.getSelectionModel().getSelectedIndex());
-
+          //switch (prodListView.getSelectionModel().getSelectedIndex()) {
     }
     else {
       System.out.println("Please select a quantity!");
@@ -64,13 +66,14 @@ public class Controller {
   }
 
   public void populateChoiceBox() {
-    items.add(ItemType.AUDIO);
-    items.add(ItemType.VISUAL);
-    items.add(ItemType.AUDIO_MOBILE);
-    items.add(ItemType.VISUAL_MOBILE);
+    for (ItemType item : ItemType.values()) {
 
-    typeChoiceBox.getSelectionModel().selectFirst();
-    typeChoiceBox.setItems(items);
+      //items.add(String.valueOf(item));
+      typeChoiceBoxStr.getItems().add(String.valueOf(item));
+    }
+
+    typeChoiceBoxStr.getSelectionModel().selectFirst();
+    //typeChoiceBoxStr.setItems(items);
   }
 
   public void connectProductDB() {
@@ -100,14 +103,13 @@ public class Controller {
       pstmt = conn.prepareStatement(SQL);
 
       pstmt.setString(1, prodNameField.getText());
-      pstmt.setString(2, typeChoiceBox.getValue().toString());
+      pstmt.setString(2, typeChoiceBoxStr.getValue());
       pstmt.setString(3, manufactField.getText());
 
       pstmt.executeUpdate();
 
-      Widget prod = new Widget(prodNameField.getText(), typeChoiceBox.getValue().toString(),manufactField.getText());
+      Widget prod = new Widget(prodNameField.getText(), manufactField.getText(), ItemType.valueOf(typeChoiceBoxStr.getValue()));
       data.add(prod);
-      existingProdTable.getItems().addAll(prod);
 
       // STEP 4: Clean-up environment
       pstmt.close();
@@ -145,11 +147,27 @@ public class Controller {
       String SQL = "SELECT * FROM PRODUCT";
 
       ResultSet rs = stmt.executeQuery(SQL);
+
+      data.clear(); // avoid duplication
+      String name;
+      String manufacturer;
+      ItemType type;
+
       while (rs.next()) {
-        Widget prod = new Widget(rs.getString(2),rs.getString(4),rs.getString(3));
+        name = rs.getString(2);
+        manufacturer = rs.getString(4);
+
+        type = null;
+
+        for (ItemType item : ItemType.values()) {
+          if (String.valueOf(item).equals(rs.getString(3))) {
+            type = item;
+          }
+        }
+
+        Widget prod = new Widget(name,manufacturer,type);
         data.add(prod);
       }
-      existingProdTable.getItems().addAll(data);
 
       stmt.close();
       conn.close();
@@ -166,13 +184,8 @@ public class Controller {
    * there should be a way to use Product's .toString() method here.
    */
   public void populateListView() {
-  prodListView.getItems().clear();
 
-    Product dataList;
-    for (int i = 0; i < data.size(); i++) {
-      dataList = new Widget(data.get(i).getName(), data.get(i).getManufacturer(), data.get(i).getType());
-       prodListView.getItems().addAll(dataList);
-    }
+
   }
 
   public void setUpProductLine() {
@@ -180,7 +193,8 @@ public class Controller {
     manuCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
     typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
 
-
+    // Adds products to tableview
+    existingProdTable.setItems(data);
     prodListView.setItems(data);
   }
 
@@ -192,8 +206,5 @@ public class Controller {
     setUpProductLine();
     populateTableView();
     populateListView();
-
-
-
   }
 }

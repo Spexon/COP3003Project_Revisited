@@ -1,4 +1,5 @@
 public enum ItemType {
+//Value      Code
   AUDIO("AU"),
   VISUAL("VI"),
   AUDIO_MOBILE("AM"),
