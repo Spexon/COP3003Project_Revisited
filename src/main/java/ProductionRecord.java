@@ -20,9 +20,14 @@ public class ProductionRecord {
     this.date = date;
   }
 
-  public ProductionRecord(Product product, int count) {
-    System.out.println("HERE");
-    serialNum = product.getManufacturer().substring(0,3) + product.getType() + "00000" + date;
+  public ProductionRecord(Product product, String c) {
+    int count = Integer.parseInt(c);
+    date = new Date();
+    System.out.println(count);
+    for ( ; count > 0; count--) { //not getting in this loop
+      serialNum = product.getManufacturer().substring(0, 3) + product.getType() + String.format("&05d", product.getId()) + date;
+    }
+    System.out.println("Serial: " + serialNum);
   }
 
   @Override

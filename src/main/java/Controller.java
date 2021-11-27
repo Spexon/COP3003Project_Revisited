@@ -10,17 +10,16 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
 
 public class Controller {
 
+  @FXML public TextArea prodLogDisplay;
   @FXML private ListView<Product> prodListView;
   @FXML private TableView<Product> existingProdTable;
   @FXML private TableColumn<Product, String> nameCol;
@@ -37,19 +36,25 @@ public class Controller {
 
   public void addProduct() {
     connectProductDB();
-    populateListView();
     System.out.println("Product Added!");
+  }
+
+  public void populateTextArea(ProductionRecord prod) {
+    //prodLogDisplay.appendText(prod);
   }
 
   public void recordProduction() {
     if (!(produceComboBox.getSelectionModel().getSelectedItem() == null)) {
-    //if (!(produceComboBox.getSelectionModel().getSelectedItem() == null)) {
+
       ArrayList<ProductionRecord> productionRun = new ArrayList<>();
+      String count = String.valueOf(produceComboBox.getValue()); // if i don't convert to string, Invocation errors will occur
+      //int count = produceComboBox.getValue();
+      ProductionRecord prod = new ProductionRecord(prodListView.getSelectionModel().getSelectedItem(), // this is the issue
+          count);
+
       System.out.println("Produce: " + produceComboBox.getSelectionModel().getSelectedItem() + "\n"
           + prodListView.getSelectionModel().getSelectedItem().getName());
-      ProductionRecord prod = new ProductionRecord(prodListView.getSelectionModel().getSelectedItem(),
-          produceComboBox.getSelectionModel().getSelectedIndex());
-          //switch (prodListView.getSelectionModel().getSelectedIndex()) {
+      System.out.println(prod);
     }
     else {
       System.out.println("Please select a quantity!");
@@ -179,15 +184,6 @@ public class Controller {
     }
   }
 
-  /**
-   * Populates the listView in produce tab when program launches, I believe
-   * there should be a way to use Product's .toString() method here.
-   */
-  public void populateListView() {
-
-
-  }
-
   public void setUpProductLine() {
     nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     manuCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
@@ -205,6 +201,5 @@ public class Controller {
 
     setUpProductLine();
     populateTableView();
-    populateListView();
   }
 }
